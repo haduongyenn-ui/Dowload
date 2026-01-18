@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Kho tải IPA / Plist</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      background: #0f172a;
+      color: #e5e7eb;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .box {
+      background: #020617;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
+      border: 1px solid #1e293b;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #38bdf8;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li {
+      padding: 8px 0;
+      border-bottom: 1px dashed #1e293b;
+    }
+
+    a {
+      color: #22c55e;
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 13px;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+
+<h1>📦 Kho tải IPA / Plist</h1>
+
+<div class="box">
+  <h2>📱 iPA</h2>
+  <ul id="ipa-list">
+    <li>Đang tải danh sách...</li>
+  </ul>
+</div>
+
+<div class="box">
+  <h2>📄 Plist</h2>
+  <ul id="plist-list">
+    <li>Đang tải danh sách...</li>
+  </ul>
+</div>
+
+<footer>
+  © Khoindvn • GitHub Pages
+</footer>
+
+<script>
+const owner = "hadougyenn-ui";   // 🔴 sửa nếu khác
+const repo  = "Dowload";         // 🔴 sửa nếu khác
+const branch = "main";
+
+async function loadFolder(folder, elementId) {
+  const api = `https://api.github.com/repos/${owner}/${repo}/contents/${folder}?ref=${branch}`;
+  const res = await fetch(api);
+  const data = await res.json();
+
+  const ul = document.getElementById(elementId);
+  ul.innerHTML = "";
+
+  if (!Array.isArray(data)) {
+    ul.innerHTML = "<li>Không có file</li>";
+    return;
+  }
+
+  data.forEach(file => {
+    if (file.type === "file") {
+      const raw = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${folder}/${file.name}`;
+      ul.innerHTML += `<li><a href="${raw}" target="_blank">${file.name}</a></li>`;
+    }
+  });
+}
+
+loadFolder("iPA", "ipa-list");
+loadFolder("Plist", "plist-list");
+</script>
+
+</body>
+</html>
